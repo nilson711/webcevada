@@ -20,3 +20,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/cadProdutos', [App\Http\Controllers\ProdutoController::class, 'index'])->name('cadProdutos');
+Route::get('/cadClientes', [App\Http\Controllers\ClienteController::class, 'index'])->name('cadClientes');
+Route::get('/cadFornecedores', [App\Http\Controllers\FornecedorController::class, 'index'])->name('cadFornecedores');
+Route::get('/estoque', [App\Http\Controllers\EstoqueController::class, 'index'])->name('estoque');
+Route::get('/vendas', [App\Http\Controllers\VendaController::class, 'index'])->name('venda');
+Route::get('/financeiro', [App\Http\Controllers\FinanceiroController::class, 'index'])->name('financeiro');
