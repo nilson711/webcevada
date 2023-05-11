@@ -27,3 +27,5 @@ Route::get('/cadFornecedores', [App\Http\Controllers\FornecedorController::class
 Route::get('/estoque', [App\Http\Controllers\EstoqueController::class, 'index'])->name('estoque');
 Route::get('/vendas', [App\Http\Controllers\VendaController::class, 'index'])->name('venda');
 Route::get('/financeiro', [App\Http\Controllers\FinanceiroController::class, 'index'])->name('financeiro');
+
+Route::post('/newProductSubmit', [App\Http\Controllers\ProdutoController::class, 'store'])->name('newProductSubmit');

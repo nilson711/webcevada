@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProdutoController extends Controller
 {
@@ -15,9 +16,16 @@ class ProdutoController extends Controller
     public function index()
     {
         //
-        // dd('Index Produto Controller');
-        return view('cadProdutos');
-        // return view('clientes', ['clientes'=> $clientes]);
+
+        $produtosCad = DB::SELECT("SELECT *  FROM produtos AS P
+        -- WHERE c.id_estado = 7
+        ORDER BY Produto
+        ;");
+
+        // dd($produtosCad);
+        
+        return view('cadProdutos', ['produtosCad'=>$produtosCad]);
+        
     }
 
     /**
@@ -39,6 +47,47 @@ class ProdutoController extends Controller
     public function store(Request $request)
     {
         //
+        // SALVA OS DADOS DOS INPUTS USANDO CREATE 
+        // (fillable tem que estar setado no model para preenchimento em massa)
+        // $TBProduto = new Produto();
+
+        // Valida os campos cod e produto
+        $request->validate([
+                
+            'cod' =>  'required|min:8|max:13' 
+        ]);
+     
+        
+        return redirect()->route('cadProdutos', [
+            'modal' => 'addProduto'
+        ]);
+
+        // Verifica na tabela produtos se exite código de barras ou o nome do produto já cadastrados.
+        $findProduto = DB::table('produtos')
+                        ->where('cod', '=', $request->input('cod')) 
+                        ->orwhere('Produto', '=', $request->input('Produto'))
+                        ->count();
+                        
+                        // dd($findProduto);
+
+        // if ($findProduto >0) {
+                     
+            
+            
+        // } else {
+        //     $TBProduto = new Produto;
+        //     $TBProduto->create($request->all());
+        //     return back()->withInput();
+        // }
+        
+        
+            
+
+
+             
+
+
+
     }
 
     /**
