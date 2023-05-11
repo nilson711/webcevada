@@ -47,45 +47,39 @@ class ProdutoController extends Controller
     public function store(Request $request)
     {
         //
-        // SALVA OS DADOS DOS INPUTS USANDO CREATE 
-        // (fillable tem que estar setado no model para preenchimento em massa)
-        // $TBProduto = new Produto();
-
+ 
         // Valida os campos cod e produto
-        $request->validate([
-                
-            'cod' =>  'required|min:8|max:13' 
-        ]);
-     
+        $request->validate(
+            // REGRAS
+            [
+                //o código deve ter mínimo 8 caracteres e no máximo 13, deve ser numérico e não pode ser repetido no banco
+                'cod' =>  'required|min:8|numeric|unique:produtos',  
+
+                // o produto deve ter mínimo 8 caracteres e não pode ser repetido no banco
+                'Produto' =>  'required|min:8|unique:produtos'
+            ],
+
+            // MENSAGENS DE FEEDBACK
+            [
+                'cod.min' => 'Cód deve ter entre 8 e 13 números!',
+                'cod.numeric' => 'Cód não pode conter letras apenas números!',
+                'cod.unique' => 'Este código já está cadastrado!',
+                'Produto.min' => 'A descrição do produto não pode conter menos que 8 caracteres!',
+                'Produto.unique' => 'Este produto já está cadastrado!',
+            ]
+        );
+
+        // SALVA OS DADOS DOS INPUTS USANDO CREATE 
+        $TBProduto = new Produto;
+        $TBProduto->create($request->all());
+        return redirect()->route('cadProdutos');
         
-        return redirect()->route('cadProdutos', [
-            'modal' => 'addProduto'
-        ]);
 
         // Verifica na tabela produtos se exite código de barras ou o nome do produto já cadastrados.
-        $findProduto = DB::table('produtos')
-                        ->where('cod', '=', $request->input('cod')) 
-                        ->orwhere('Produto', '=', $request->input('Produto'))
-                        ->count();
-                        
-                        // dd($findProduto);
-
-        // if ($findProduto >0) {
-                     
-            
-            
-        // } else {
-        //     $TBProduto = new Produto;
-        //     $TBProduto->create($request->all());
-        //     return back()->withInput();
-        // }
-        
-        
-            
-
-
-             
-
+        // $findProduto = DB::table('produtos')
+        //                 ->where('cod', '=', $request->input('cod')) 
+        //                 ->orwhere('Produto', '=', $request->input('Produto'))
+        //                 ->count();
 
 
     }
