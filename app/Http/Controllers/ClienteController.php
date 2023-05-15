@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ClienteController extends Controller
 {
@@ -15,7 +16,9 @@ class ClienteController extends Controller
     public function index()
     {
         //
-        return view('cadClientes');
+
+        $ClientesCad = DB::SELECT("SELECT *  FROM clientes AS C ORDER BY nomeClient;");
+        return view('cadClientes', ['ClientesCad'=>$ClientesCad]);
     }
 
     /**
@@ -37,6 +40,10 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request->all());
+        $TBCliente = new Cliente;
+        $TBCliente->create($request->all());
+        return redirect()->route('cadClientes');
     }
 
     /**

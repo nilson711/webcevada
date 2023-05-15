@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Fornecedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FornecedorController extends Controller
 {
@@ -15,7 +16,8 @@ class FornecedorController extends Controller
     public function index()
     {
         //
-        return view('cadFornecedores');
+        $FornecedorsCad = DB::SELECT("SELECT * FROM fornecedors AS F ORDER BY fornecedor;");
+        return view('cadFornecedores', ['FornecedorsCad' => $FornecedorsCad]);
     }
 
     /**
@@ -37,6 +39,10 @@ class FornecedorController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request);
+        $TBFornec = new Fornecedor;
+        $TBFornec->create($request->all());
+        return redirect()->route('cadFornecedores');
     }
 
     /**

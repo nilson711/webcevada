@@ -16,18 +16,22 @@ class ProdutoController extends Controller
     public function index()
     {
         //
-
-        $produtosCad = DB::SELECT("SELECT *  FROM produtos AS P
-        -- WHERE c.id_estado = 7
-        ORDER BY Produto
-        ;");
-
-        // dd($produtosCad);
-        
-        return view('cadProdutos', ['produtosCad'=>$produtosCad]);
-        
+        $produtosCad = DB::SELECT("SELECT *  FROM produtos AS P ORDER BY Produto;");
+        $msgSalvo = 0;
+        return view('cadProdutos', ['produtosCad'=>$produtosCad, 'msgSalvo'=>$msgSalvo]);
     }
 
+    // =========================================================================================
+    // retorna a index com msg Salvo ativa
+    public function indexs()
+    {
+        //
+        $produtosCad = DB::SELECT("SELECT *  FROM produtos AS P ORDER BY Produto;");
+        $msgSalvo = 1;
+        return view('cadProdutos', ['produtosCad'=>$produtosCad, 'msgSalvo'=>$msgSalvo]);
+    }
+
+    // =========================================================================================
     /**
      * Show the form for creating a new resource.
      *
@@ -38,6 +42,7 @@ class ProdutoController extends Controller
         //
     }
 
+    // =========================================================================================
     /**
      * Store a newly created resource in storage.
      *
@@ -46,7 +51,6 @@ class ProdutoController extends Controller
      */
     public function store(Request $request)
     {
-        //
  
         // Valida os campos cod e produto
         $request->validate(
@@ -72,18 +76,17 @@ class ProdutoController extends Controller
         // SALVA OS DADOS DOS INPUTS USANDO CREATE 
         $TBProduto = new Produto;
         $TBProduto->create($request->all());
-        return redirect()->route('cadProdutos');
+        return redirect()->route('cadProdutoss');
         
-
         // Verifica na tabela produtos se exite código de barras ou o nome do produto já cadastrados.
         // $findProduto = DB::table('produtos')
         //                 ->where('cod', '=', $request->input('cod')) 
         //                 ->orwhere('Produto', '=', $request->input('Produto'))
         //                 ->count();
 
-
     }
 
+    // =========================================================================================
     /**
      * Display the specified resource.
      *
@@ -95,6 +98,7 @@ class ProdutoController extends Controller
         //
     }
 
+    // =========================================================================================
     /**
      * Show the form for editing the specified resource.
      *
@@ -106,6 +110,7 @@ class ProdutoController extends Controller
         //
     }
 
+    // =========================================================================================
     /**
      * Update the specified resource in storage.
      *
@@ -113,11 +118,20 @@ class ProdutoController extends Controller
      * @param  \App\Models\Produto  $produto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Produto $produto)
+    public function update(Request $request, $id)
     {
         //
+        // $prodEdit = Produto::find($id);
+       
+        Produto::where('id', $id)
+                ->update(['cod' => $request->input('newcod'), 'Produto' => $request->input('newProduto')]);
+
+                $produtosCad = DB::SELECT("SELECT *  FROM produtos AS P ORDER BY Produto;");
+                $msgSalvo = 1;
+                return redirect()->route('cadProdutoss');
     }
 
+    // =========================================================================================
     /**
      * Remove the specified resource from storage.
      *
