@@ -39,8 +39,8 @@
             <div>
                 <div style="text-align: center; color:white">
                     <h1>WebCevada</h1>
-                    <p>Sistema para Depósitos de Bebidas</p>
-                    <img src="https://www.servsolution.com.br/assets/img/portfolio/thumb/cervejas.png" alt="" width="350px">
+                    {{-- <p style="text-align: left">Controle de <br>Estoque,<br>Vendas e <br>Administração para <br>Depósitos de Bebidas e <br>Afins</p> --}}
+                    
 
                         @if (Route::has('login'))
                             <div>
