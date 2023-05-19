@@ -65,13 +65,13 @@
 
             <div class="form-group">
               <label for="cod">Código</label>
-              <input type="hidden" name="idProd" id="idProd">
-              <input type="text" class="form-control" id="newcod" name="newcod" maxlength="13" type="number" required placeholder="Ex: 78936683"  >
+              <input type="text" class="editInput" name="idProd" id="idProd">
+              <input type="text" class="form-control editInput" id="newcod" name="newcod" maxlength="13" type="number" required placeholder="Ex: 78936683"  >
                 <div style="color:red"> {{$errors->has('cod') ? $errors->first('cod') : ''}} </div>
             </div>
             <div class="form-group">
               <label for="Produto">Descrição</label>
-              <input type="text" class="form-control" id="newProduto" name="newProduto" onkeydown="upperCaseF(this)" required placeholder="Ex: CERVEJA HEINEKEN LONG NECK 330ML CX C/ 12 UND"  >
+              <input type="text" class="form-control editInput" id="newProduto" name="newProduto" onkeydown="upperCaseF(this)" required placeholder="Ex: CERVEJA HEINEKEN LONG NECK 330ML CX C/ 12 UND"  >
               <div style="color:red">{{$errors->has('Produto') ? $errors->first('Produto') : ''}} </div>
             </div>
             
@@ -142,8 +142,8 @@
                                 {{-- <td>{{$prod->id}}</td> --}}
                                 <td>{{$prod->cod}}</td>
                                 <td>{{$prod->Produto}}</td>
-                                <td>
-                                  <button type="button" class="btn btn-sm btn-oculto btn-primary float-right" data-idp="{{$prod->id}}" data-cod="{{$prod->cod}}" data-nome="{{$prod->Produto}}"  data-toggle="modal" data-target="#editProduto">Editar</button>
+                                <td> 
+                                  <button onclick="ValuesToModais('editProduto', '{{$prod->id}}', '{{$prod->cod}}', '{{$prod->Produto}}');" type="button" class="btn btn-sm btn-oculto btn-primary float-right" data-idp="{{$prod->id}}" data-cod="{{$prod->cod}}" data-nome="{{$prod->Produto}}"  data-toggle="modal" data-target="#editProduto">Editar</button>
                                 </td> 
                               </tr>
 
@@ -166,9 +166,10 @@
 {{-- <script src="js/alertSucess.js" defer></script> --}}
 <script src="js/seachInTable.js"></script>
 <script src="js/verBtnMoverMouse.js"></script>
-<script src="js/valueToModal.js"></script>
+{{-- <script src="js/valueToModal.js"></script> --}}
 <script src="js/idRouteToModal.js"></script>
 <script src="js/upperCaseF.js"></script>
+<script src="js/ValuesToModais.js"></script>
 
 @if ($msgSalvo)
   <script src="js/alertSucess.js"></script>
