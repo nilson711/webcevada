@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Estoque;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EstoqueController extends Controller
 {
@@ -14,8 +15,36 @@ class EstoqueController extends Controller
      */
     public function index()
     {
-        //
-        return view('estoque');
+        
+    /*
+    Busca a quantidade de Produto em Estoque,
+    Busca a quantidade de Produtos Vendidos
+    Calcula a diferente entre Comprados - Vendidos 
+    retornando o estoque atual. 
+    Caso o valor de qtdVenda seja NULL a função COALESCE retorna a qtdComprada para a coluna emEstoque
+    */
+
+    $estoquesCad = DB::SELECT("SELECT P.id, P.cod, P.Produto, E.qtdComprada, I.qtdVenda, 
+                        COALESCE(E.qtdComprada - I.qtdVenda, E.qtdComprada) AS emEstoque
+                        FROM produtos AS P
+                        LEFT JOIN (
+                            SELECT produtos_id, SUM(qtd) AS qtdComprada
+                            FROM estoques
+                            GROUP BY produtos_id
+                        ) AS E ON P.id = E.produtos_id
+                        LEFT JOIN (
+                            SELECT produto_id, SUM(qtd) AS qtdVenda
+                            FROM itens
+                            GROUP BY produto_id
+                        ) AS I ON P.id = I.produto_id;
+                        
+                        ");
+
+    $FornecedorsCad = DB::SELECT("SELECT * FROM fornecedors AS F ORDER BY fornecedor;");
+        
+                            
+        $msgSalvo = 0;
+        return view('estoque', ['estoquesCad'=>$estoquesCad, 'FornecedorsCad'=>$FornecedorsCad, 'msgSalvo'=>$msgSalvo]);
     }
 
     /**
@@ -36,7 +65,12 @@ class EstoqueController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+      // SALVA OS DADOS DOS INPUTS USANDO CREATE 
+      $TBEstoque = new Estoque;
+      $TBEstoque->create($request->all());
+      return redirect()->route('estoque');
+        
     }
 
     /**

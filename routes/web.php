@@ -38,3 +38,5 @@ Route::post('/editclientSubmit/{id}', [App\Http\Controllers\ClienteController::c
 Route::get('/cadFornecedores', [App\Http\Controllers\FornecedorController::class, 'index'])->name('cadFornecedores');
 Route::post('/newFornecSubmit', [App\Http\Controllers\FornecedorController::class, 'store'])->name('newFornecSubmit');
 Route::post('/editFornecSubmit/{id}', [App\Http\Controllers\FornecedorController::class, 'update'])->name('editFornecSubmit');
+
+Route::post('/newEstoqueSubmit', [App\Http\Controllers\EstoqueController::class, 'store'])->name('newEstoqueSubmit');
