@@ -64,14 +64,13 @@
       </div>
       
       <div class="modal-body">
-        <h5 style="color:red">Não está funcionando Arrumar função valueToModal</h5>
         
         <form id="form-edit" action="{{route('editclientSubmit', 999)}}" method="post">
             @csrf
 
             <div class="form-group">
               <label for="Cliente">Nome:</label>
-              <input type="text" name="IdClient" class="editInput">
+              <input type="hidden" name="IdClient" class="editInput">
               <input type="text" class="form-control editInput" id="newCliente" name="newCliente" onkeydown="upperCaseF(this)" required placeholder="Nome do Cliente" value="{{old('newCliente')}}" >
               {{-- <div style="color:red">{{$errors->has('Cliente') ? $errors->first('Cliente') : ''}} </div> --}}
             </div>
@@ -89,7 +88,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="button" class="btn btn-primary">Salvar</button>
           </div>
       </form>
     </div>
@@ -153,7 +152,7 @@
                                 <td>{{$client->id}}</td>
                                 <td>{{$client->nomeClient}}</td>
                                 <td>
-                                  <button type="button" onclick="ValuesToModais('editCliente', '{{$client->id}}', '{{$client->nomeClient}}', '{{$client->EndClient}}', {{$client->tel1Client}})" class="btn btn-sm btn-oculto btn-primary float-right" data-idp="{{$client->id}}" data-nome="{{$client->nomeClient}}"  data-toggle="modal" data-target="#editCliente">Editar</button>
+                                  <button type="button" onclick="ValuesToModais('editCliente', '{{$client->id}}', '{{$client->nomeClient}}', '{{$client->EndClient}}', '{{$client->tel1Client}}')" class="btn btn-sm btn-oculto btn-primary float-right" data-idp="{{$client->id}}" data-nome="{{$client->nomeClient}}"  data-toggle="modal" data-target="#editCliente">Editar</button>
                                 </td> 
                               </tr>
 
@@ -177,9 +176,10 @@
 <script src="js/seachInTable.js"></script>
 <script src="js/verBtnMoverMouse.js"></script>
 {{-- <script src="js/valueToModal.js"></script> --}}
-<script src="js/idRouteToModal.js"></script>
+{{-- <script src="js/idRouteToModal.js"></script> --}}
 <script src="js/upperCaseF.js"></script>
 <script src="js/ValuesToModais.js"></script>
+<script src="js/idToRouteToModal.js"></script>
 
 {{-- @if ($msgSalvo)
   <script src="js/alertSucess.js"></script>

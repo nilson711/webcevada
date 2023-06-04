@@ -64,24 +64,20 @@
       </div>
       
       <div class="modal-body">
-        <h5 style="color:red">Não está funcionando Arrumar função valueToModal</h5>
-        
+                
         <form id="form-edit" action="#" method="post">
             @csrf
 
             <div class="form-group">
               <label for="Fornecedor">Nome:</label>
-              <input type="text" class="form-control" id="newFornecedor" name="newFornecedor" onkeydown="upperCaseF(this)" required placeholder="Nome do Fornecedor" value="{{old('newFornecedor')}}" >
+              <input type="hidden" class="editInput" name="idFornec" id="idFornec">
+              <input type="text" class="form-control editInput" id="newFornecedor" name="newFornecedor" onkeydown="upperCaseF(this)" required placeholder="Nome do Fornecedor" value="{{old('newFornecedor')}}" >
               {{-- <div style="color:red">{{$errors->has('Fornecedor') ? $errors->first('Fornecedor') : ''}} </div> --}}
             </div>
-            <div class="form-group">
-              <label for="Endereço">Endereço:</label>
-              <input type="text" class="form-control" id="newEnd" name="newEnd" onkeydown="upperCaseF(this)"  placeholder="Endereço do Fornecedor" value="{{old('newEnd')}}" >
-              {{-- <div style="color:red">{{$errors->has('end') ? $errors->first('Fornecedor') : ''}} </div> --}}
-            </div>
+            
             <div class="form-group">
               <label for="Fornecedor">Telefone:</label>
-              <input type="text" class="form-control" id="newTel" name="newTel" onkeydown="upperCaseF(this)"  placeholder="9999-9999" value="{{old('newTel')}}" >
+              <input type="text" class="form-control editInput" id="newTel" name="newTel" onkeydown="upperCaseF(this)"  placeholder="9999-9999" value="{{old('newTel')}}" >
               {{-- <div style="color:red">{{$errors->has('end') ? $errors->first('end') : ''}} </div> --}}
             </div>
             
@@ -152,7 +148,7 @@
                                 <td>{{$fornec->id}}</td>
                                 <td>{{$fornec->fornecedor}}</td>
                                 <td>
-                                  <button type="button" class="btn btn-sm btn-oculto btn-primary float-right" data-idp="{{$fornec->id}}" data-nome="{{$fornec->fornecedor}}"  data-toggle="modal" data-target="#editFornecedor">Editar</button>
+                                  <button type="button" onclick="ValuesToModais('editFornecedor', '{{$fornec->id}}', '{{$fornec->fornecedor}}', '{{$fornec->telefone}}');" class="btn btn-sm btn-oculto btn-primary float-right" data-idp="{{$fornec->id}}" data-nome="{{$fornec->fornecedor}}"  data-toggle="modal" data-target="#editFornecedor">Editar</button>
                                 </td> 
                               </tr>
 
@@ -175,9 +171,10 @@
 {{-- <script src="js/alertSucess.js" defer></script> --}}
 <script src="js/seachInTable.js"></script>
 <script src="js/verBtnMoverMouse.js"></script>
-<script src="js/valueToModal.js"></script>
+{{-- <script src="js/valueToModal.js"></script> --}}
 <script src="js/idRouteToModal.js"></script>
 <script src="js/upperCaseF.js"></script>
+<script src="js/ValuesToModais.js"></script>
 
 {{-- @if ($msgSalvo)
   <script src="js/alertSucess.js"></script>
