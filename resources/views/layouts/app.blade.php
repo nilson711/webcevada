@@ -18,6 +18,11 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <!-- Select2 -->
+    <script src="{{Config::get('app.url')}}/node_modules/select2/dist/js/select2.min.js"></script>
+
+
 </head>
 <body>
     <div id="app">
@@ -92,9 +97,12 @@
             </div>
         </nav>
 
+        
         <main class="py-4">
             @yield('content')
         </main>
+
     </div>
+  
 </body>
 </html>

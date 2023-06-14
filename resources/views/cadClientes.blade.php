@@ -70,7 +70,7 @@
 
             <div class="form-group">
               <label for="Cliente">Nome:</label>
-              <input type="hidden" name="IdClient" class="editInput">
+              <input type="hidden" name="IdClient" id="IdClient" class="editInput">
               <input type="text" class="form-control editInput" id="newCliente" name="newCliente" onkeydown="upperCaseF(this)" required placeholder="Nome do Cliente" value="{{old('newCliente')}}" >
               {{-- <div style="color:red">{{$errors->has('Cliente') ? $errors->first('Cliente') : ''}} </div> --}}
             </div>
@@ -88,7 +88,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary">Salvar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
           </div>
       </form>
     </div>

@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Estoque extends Model
 {
-    protected $fillable = ['fornecedors_id', 'produtos_id', 'qtd', 'unit', 'custoTotal', 'vlVenda'];
+    protected $fillable = ['fornecedors_id', 'produtos_id', 'qtd', 'unit', 'custoTotal', 'vlVenda', 'vlAtacado'];
     use HasFactory;
 }

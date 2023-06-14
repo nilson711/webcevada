@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Venda;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VendaController extends Controller
 {
@@ -15,7 +16,31 @@ class VendaController extends Controller
     public function index()
     {
         //
-        return view ('vendas');
+
+        $estoquesCad = DB::SELECT("SELECT P.id, P.cod, P.Produto, P.precoVenda,P.precoAtacado, E.qtdComprada, I.qtdVenda, 
+        COALESCE(E.qtdComprada - I.qtdVenda, E.qtdComprada) AS emEstoque
+        FROM produtos AS P
+        LEFT JOIN (
+            SELECT produtos_id, SUM(qtd) AS qtdComprada
+            FROM estoques
+            GROUP BY produtos_id
+        ) AS E ON P.id = E.produtos_id
+        LEFT JOIN (
+            SELECT produto_id, SUM(qtd) AS qtdVenda
+            FROM itens
+            GROUP BY produto_id
+        ) AS I ON P.id = I.produto_id;
+        
+        ");
+
+    
+    $ClientesCad = DB::SELECT("SELECT *  FROM clientes AS C ORDER BY nomeClient;");
+
+
+
+    $msgSalvo = 0;
+    return view('newvendas', ['estoquesCad'=>$estoquesCad, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo]);
+        
     }
 
     /**

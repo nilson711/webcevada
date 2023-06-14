@@ -78,7 +78,14 @@ class ClienteController extends Controller
     public function update(Request $request, Cliente $cliente)
     {
         //
-        dd($request->all());
+        // dd($request->all());
+
+        Cliente::where('id', $request->IdClient)
+        ->update(['nomeClient' => $request->input('newCliente'), 'EndClient' => $request->input('newEnd'), 'tel1Client' =>$request->input('newTel') ]);
+
+        // $produtosCad = DB::SELECT("SELECT *  FROM produtos AS P ORDER BY Produto;");
+        // $msgSalvo = 1;
+        return redirect()->route('cadClientes');
     }
 
     /**

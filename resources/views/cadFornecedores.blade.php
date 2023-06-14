@@ -65,12 +65,12 @@
       
       <div class="modal-body">
                 
-        <form id="form-edit" action="#" method="post">
+        <form id="form-edit" action="{{route('editFornecSubmit', 999)}}" method="post">
             @csrf
 
             <div class="form-group">
               <label for="Fornecedor">Nome:</label>
-              <input type="hidden" class="editInput" name="idFornec" id="idFornec">
+              <input type="text" name="idFornec" id="idFornec" class="editInput">
               <input type="text" class="form-control editInput" id="newFornecedor" name="newFornecedor" onkeydown="upperCaseF(this)" required placeholder="Nome do Fornecedor" value="{{old('newFornecedor')}}" >
               {{-- <div style="color:red">{{$errors->has('Fornecedor') ? $errors->first('Fornecedor') : ''}} </div> --}}
             </div>
@@ -81,12 +81,12 @@
               {{-- <div style="color:red">{{$errors->has('end') ? $errors->first('end') : ''}} </div> --}}
             </div>
             
-          </div>
+      </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary">Salvar</button>
           </div>
-      </form>
+        </form>
     </div>
   </div>
 </div>
@@ -172,9 +172,10 @@
 <script src="js/seachInTable.js"></script>
 <script src="js/verBtnMoverMouse.js"></script>
 {{-- <script src="js/valueToModal.js"></script> --}}
-<script src="js/idRouteToModal.js"></script>
+{{-- <script src="js/idRouteToModal.js"></script> --}}
 <script src="js/upperCaseF.js"></script>
 <script src="js/ValuesToModais.js"></script>
+{{-- <script src="js/idToRouteToModal.js"></script> --}}
 
 {{-- @if ($msgSalvo)
   <script src="js/alertSucess.js"></script>

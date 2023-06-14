@@ -1,6 +1,124 @@
 @extends('layouts.app')
 
+
+
 @section('content')
+
+
+{{--------------------- MODAL COMANDAS --------------------}}
+
+<div class="modal fade" id="comandaSelecionada" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="comandaSelecionada">Comanda - nº 09 | Cliente: Puta véia</h5>
+          
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action= # method="post">
+          @csrf
+          <div class="modal-body">
+
+
+            <table class="table table-borderless table-sm" id="listProd">
+                <thead>
+                  <tr>
+                    <th scope="col">Qtd</th>
+                    <th scope="col">Produto</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col" style="text-align: right">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {{-- @foreach ($produtosCad as $prod) --}}
+                      <tr>
+                        <td>03</td>
+                        <td>Cerveja Skol 269 ml</td>
+                        <td style="text-align: right">3.00</td>
+                        <td style="text-align: right">9.00</td>
+                      </tr>
+                      <tr>
+                        <td>05</td>
+                        <td>Cerveja Heineken 350 ml</td>
+                        <td style="text-align: right">7.00</td>
+                        <td style="text-align: right">35.00</td>
+                      </tr>
+                      <tr>
+                        <td>04</td>
+                        <td>Cerveja Brahma Duplo Malte 350 ml</td>
+                        <td style="text-align: right">4.00</td>
+                        <td style="text-align: right">16.00</td>
+                      </tr>
+                    {{-- @endforeach --}}
+                </tbody>
+            </table>
+            <tfoot>
+                <tr>
+                    <h5 style="text-align: right; color:red">60,00</h5>
+                </tr>
+                <hr>
+            </tfoot>
+
+            {{-- Tabela de Pagamentos --}}
+
+            <h5>Pagamentos</h5>
+            <table class="table table-borderless table-sm" id="listProd">
+                <thead>
+                  <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Forma</th>
+                    <th scope="col" style="text-align: right">Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {{-- @foreach ($produtosCad as $prod) --}}
+                      <tr>
+                        <td>01/06/2023</td>
+                        <td>Dinheiro</td>
+                        <td style="text-align: right">20.00</td>
+                      </tr>
+                      <tr>
+                        <td>05/06/2023</td>
+                        <td>Pix</td>
+                        <td style="text-align: right">10.00</td>
+                      </tr>
+                      
+                    {{-- @endforeach --}}
+                </tbody>
+            </table>
+            <tfoot>
+                <tr>
+                    <h5 style="text-align: right; color:blue">30,00</h5>
+                </tr>
+                <hr>
+            </tfoot>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Devedor</h5>
+                </div>
+                <div class="col-md-6">
+                    <h5 style="text-align: right">30,00</h5>
+                </div>
+
+            </div>
+                <tr>
+                </tr>
+
+            </div>
+            <div class="modal-footer">
+              {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button> --}}
+              <button type="button" class="btn btn-primary">Novo Pagamento</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {{-- ==================================================================================== --}}
+
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -16,24 +134,35 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="card border-secondary mb-3" style="max-width: 18rem;">
-                        <div class="card-header">Faturamento</div>
+                        <div class="card-header">Caixa - 16/05/2023</div>
                         <div class="card-body text-secondary">
-                          <h5 class="card-title">16/05/2023</h5>
+                          {{-- <h5 class="card-title"></h5> --}}
                           <p class="card-text">R$ 145,66</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card border-danger mb-3" style="max-width: 18rem;">
-                      <div class="card-header">Estoque</div>
+                      <div class="card-header">Comandas</div>
                       <div class="card-body text-secondary">
-                        <h5 class="card-title">Estoque Baixo</h5>
-                        <p class="card-text">
-                            <ul>Cerveja 01</ul>    
-                            <ul>Cerveja 02</ul>    
-                            <ul>Cerveja 03</ul>    
-                            <ul>Cerveja 04</ul>    
-                        </p>
+                        {{-- <h5 class="card-title">Comandas</h5> --}}
+                            <table class="table table-borderless table-sm" id="myTable">
+                                <thead>
+                                <tr>
+                                    {{-- <th scope="col">Cliente</th>
+                                    <th scope="col">Valor</th> --}}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {{-- @foreach ($produtosCad as $prod) --}}
+                                    <tr>
+                                        <td><a href="#comandaSelecionada" data-toggle="modal" data-target="#comandaSelecionada">Puta Véia</a></td>
+                                        <td>30,00</td>
+                                    </tr>
+        
+                                    {{-- @endforeach --}}
+                                </tbody>
+                            </table>
                       </div>
                     </div>
                 </div>

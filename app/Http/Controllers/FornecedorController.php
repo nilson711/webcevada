@@ -77,6 +77,17 @@ class FornecedorController extends Controller
     public function update(Request $request, Fornecedor $fornecedor)
     {
         //
+
+        // dd('entrei no update do fornecedor');
+        // dd($request->all());
+
+        Fornecedor::where('id', $request->idFornec)
+        ->update(['fornecedor' => $request->input('newFornecedor'), 'telefone' => $request->input('newTel') ]);
+
+        // $produtosCad = DB::SELECT("SELECT *  FROM produtos AS P ORDER BY Produto;");
+        // $msgSalvo = 1;
+        return redirect()->route('cadFornecedores');
+        
     }
 
     /**

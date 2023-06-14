@@ -11,7 +11,7 @@
 {{--------------------- MODAL Adicionar Novo Estoque --------------------}}
 
 <div class="modal fade" id="addEstoque" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addEstoque">Adicionar Novo Estoque</h5>
@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label for="cod">Código</label>
-                        <input type="text" class="form-control" id="cod" name="cod" maxlength="13" type="number" required placeholder="Ex: 78936683" value="{{old('cod')}}" >
+                        <input type="text" class="form-control editInput" id="cod" name="cod" maxlength="13" type="number" required placeholder="Ex: 78936683" value="{{old('cod')}}" >
                         <div style="color:red"> {{$errors->has('cod') ? $errors->first('cod') : ''}} </div>
                     </div>
                     <div class="col-md-6">
@@ -43,7 +43,7 @@
             </div>
             <div class="form-group">
                 <label for="idProduto">Produto</label>
-                <select class="form-control" id="produtos_id" name="produtos_id">
+                <select class="form-control editInput" id="produtos_id" name="produtos_id">
                     @foreach ($estoquesCad as $itemEstoq)
                         <option value="{{$itemEstoq->id}}">{{$itemEstoq->Produto}}</option>
                     @endforeach
@@ -52,21 +52,27 @@
             
             <div class="form-group">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="qtd">Qtd</label>
-                        <input type="number" class="form-control" title="Qtd que entrará no Estoque" name="qtd" id="qtd" required>
+                        <input type="number" class="form-control" title="Qtd em UNIDADES que entrará no Estoque" name="qtd" id="qtd" min="1" required onchange="calculaCustoAddEstoque()">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="custoUnit">Custo Unit</label>
-                        <input type="text" class="form-control" title="Custo Unitário" name="unit" id="unit" required>
+                        <input type="text" class="form-control" title="Custo Unitário" name="unit" id="unit" value="0" required onchange="calculaCustoAddEstoque()">
                     </div>
                     <div class="col-md-3">
                         <label for="custoTotal">Custo Total</label>
-                        <input type="text" class="form-control" title="Custo Total" name="custoTotal" id="custoTotal" required>
+                        <input type="text" class="form-control" title="Custo Total" name="custoTotal" id="custoTotal" required readonly>
                     </div>
-                    <div class="col-md-3">
-                        <label for="custoTotal">Valor Venda</label>
-                        <input type="text" class="form-control" title="Preço p/ Venda" name="vlVenda" id="vlVenda" required>
+                    <div class="col-md-2">
+                        <label for="vlVenda">Venda Varejo</label>
+                        <input type="text" class="form-control" title="Preço p/ Varejo (unidade) " name="vlVenda" id="vlVenda" value="0" required onchange="calculaLucroVarejo()">
+                        <small id="margemVarejo" title="margem de lucro">0%</small>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="vlAtacado">Venda Atacado</label>
+                        <input type="text" class="form-control" title="Preço p/ Atacado (caixa)" name="vlAtacado" id="vlAtacado" value="0" required onchange="calculaLucroAtacado()">
+                        <small id="margemAtacado" title="margem de lucro">0%</small>
                     </div>
                 </div>
                 
@@ -75,7 +81,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary" onclick="exibirAlerta('A operação foi realizada com êxito.', 'success', 5000);">Salvar</button>
+            <button type="submit" id="btnSalvarAddEstoque" disabled class="btn btn-primary" onclick="exibirAlerta('A operação foi realizada com êxito.', 'success', 5000);">Salvar</button>
           </div>
       </form>
     </div>
@@ -181,7 +187,7 @@
                                 
                               <tr onmouseover="mostrarBotao(this);" onmouseout="ocultarBotao(this);">
                                 <td>{{$estoque->cod}}</td>
-                                <td>{{$estoque->Produto}}</td>
+                                <td>{{$estoque->id}} - {{$estoque->Produto}}</td>
                                 <td style="text-align: right">{{$estoque->emEstoque ? $estoque->emEstoque : "0" }}</td>
                                 <td>
                                   <button type="button" class="btn btn-sm btn-oculto btn-primary float-right" data-idp="{{$estoque->id}}" data-cod="{{$estoque->cod}}" data-nome="{{$estoque->Produto}}"  data-toggle="modal" data-target="#addEstoque">+</button>
@@ -207,19 +213,17 @@
 {{-- <script src="js/alertSucess.js" defer></script> --}}
 <script src="js/seachInTable.js"></script>
 <script src="js/verBtnMoverMouse.js"></script>
-<script src="js/valueToModal.js"></script>
+{{-- <script src="js/valueToModal.js"></script> --}}
 <script src="js/idRouteToModal.js"></script>
 <script src="js/upperCaseF.js"></script>
+<script src="js/valueToModalEstoque.js"></script>
+<script src="js/functionsEstoque.js"></script>
+
 
 @if ($msgSalvo)
   <script src="js/alertSucess.js"></script>
 @endif
 
-
- 
-  <script>
-
-  </script>
 
 @endsection
 
