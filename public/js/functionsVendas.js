@@ -51,3 +51,13 @@ function exibirTresLinhas() {
     varsubtotal.value = document.getElementById('qtd').value * document.getElementById('vlUnit').value;
   }
   
+
+function mostrarValor() {
+  var select = document.getElementById("selectFind");
+  var option = select.options[select.selectedIndex];
+  var valorSelecionado = option.value;
+  var valor2 = option.getAttribute("data-value2");
+  var valor3 = option.getAttribute("data-value3");
+
+  alert(`O id é: ${valorSelecionado}\nValor2: ${valor2}\nValor3: ${valor3}`);
+}

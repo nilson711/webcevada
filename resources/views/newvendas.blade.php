@@ -20,7 +20,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <!-- Select2 -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet"/>
+    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 
 
 </head>
@@ -99,16 +101,28 @@
 
         
         <div class="container">
-            <div class="row">
+            <div class="row justify-content-center">
+              
+              
               <div class="col-md-12">
-                <div class="card" style="border-color: black">
+                @if ($errors->any())
+                  <div style="position: absolute; top:0px; left:0px; width:100%; color:white; background-color: red; text-align:center">
+                    @foreach ($errors->all() as $erro)
+                        {{$erro}}<br>
+                    @endforeach
+                  </div>
+                  <hr><br><br>
+                 @endif
+
+                 <br>
+                <div class="card">
                   <form action="#" method="post">
                     @csrf
-                  <div >
+                  <div class="card-header" >
                     <div class="row">
-                      {{-- <div class="col-md-1" style="margin: 10px">
+                      <div class="col-md-1" style="margin: 3px">
                         <h5>Vendas</h5>
-                      </div> --}}
+                      </div>
           
                       <div class="form-group col-md-2">
                         <small>Cliente</small>
@@ -121,34 +135,22 @@
                       </div>
           
                       <div class="form-group col-md-1" style="text-align: center">
-                        {{-- <small>Atacado</small> --}}
                         <small>Atacado</small><br> 
                         <input type="checkbox" class="form-check-input" id="checkAtacado" style="width: 20px; height:20px">                
-                        {{-- <select class="form-control form-control-sm">
-                          <option selected>Varejo</option>
-                          <option>Atacado</option>
-                        </select> --}}
+                        
                       </div>
           
                       <div class="col-md-7">
                         <small>Produto</small>
                         {{-- <input type="text" class="form-control form-control-sm" id="myInput" onkeyup="searchTable()" placeholder="Procurar..."> --}}
           
-                        <select class="form-control form-control-sm select2" id="selectFind">
+                        <select class="form-control form-control-sm select2" id="selectFind" onchange="mostrarValor()" >
+                          <option value="" selected>Selecione um Produto</option>
                           @foreach ($estoquesCad as $Prod)
-                            <option value="{{$Prod->id}}">{{$Prod->Produto}}</option>
+                            <option value="{{$Prod->id}}" data-value2={{$Prod->precoVenda}} data-value3={{$Prod->precoAtacado}}>{{$Prod->Produto}} / R$ {{$Prod->precoVenda}}</option>
                           @endforeach
                         </select>
-          
-          
-                        {{-- <select class="js-example-basic-single" name="state">
-                          <option value="AL">Alabama</option>
-                            ...
-                          <option value="WY">Wyoming</option>
-                        </select> --}}
-          
-                                      
-          
+
                       </div>
                     </div>
           
@@ -274,15 +276,36 @@
           <script src="js/functionsVendas.js"></script>
           <script src="js/verBtnMoverMouse.js"></script>
           
-          <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-          <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+          {{-- <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script> --}}
+          {{-- <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script> --}}
+          {{-- <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script> --}}
+          {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+          {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
+          
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+          
           
           <script>
-              // In your Javascript (external .js resource or <script> tag)
                   $(document).ready(function() {
                       $('#selectFind').select2();
-                  });
+                      document.querySelector('#selectFind').focus();
+
+                      // move o foco para dentro do input de pesquisa do select2
+                      $(document).on('select2:open', () => {
+                        document.querySelector('.select2-search__field').focus();
+                      });
+                    });
+                    
           </script>
+
+          <script>
+            
+          </script>
+
+                
+
+       
 
     </div>
   
