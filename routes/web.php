@@ -28,6 +28,8 @@ Route::post('/editProductSubmit/{id}', [App\Http\Controllers\ProdutoController::
 
 Route::get('/estoque', [App\Http\Controllers\EstoqueController::class, 'index'])->name('estoque');
 Route::get('/vendas', [App\Http\Controllers\VendaController::class, 'index'])->name('venda');
+Route::get('/vendas_old', [App\Http\Controllers\VendaController::class, 'old'])->name('vendaold');
+
 Route::get('/financeiro', [App\Http\Controllers\FinanceiroController::class, 'index'])->name('financeiro');
 
 

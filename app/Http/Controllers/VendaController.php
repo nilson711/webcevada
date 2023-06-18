@@ -39,7 +39,38 @@ class VendaController extends Controller
 
 
     $msgSalvo = 0;
-    return view('newvendas', ['estoquesCad'=>$estoquesCad, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo]);
+    return view('newpdv', ['estoquesCad'=>$estoquesCad, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo]);
+        
+    }
+
+
+    public function old()
+    {
+        //
+
+        $estoquesCad = DB::SELECT("SELECT P.id, P.cod, P.Produto, P.precoVenda,P.precoAtacado, E.qtdComprada, I.qtdVenda, 
+        COALESCE(E.qtdComprada - I.qtdVenda, E.qtdComprada) AS emEstoque
+        FROM produtos AS P
+        LEFT JOIN (
+            SELECT produtos_id, SUM(qtd) AS qtdComprada
+            FROM estoques
+            GROUP BY produtos_id
+        ) AS E ON P.id = E.produtos_id
+        LEFT JOIN (
+            SELECT produto_id, SUM(qtd) AS qtdVenda
+            FROM itens
+            GROUP BY produto_id
+        ) AS I ON P.id = I.produto_id;
+        
+        ");
+
+    
+    $ClientesCad = DB::SELECT("SELECT *  FROM clientes AS C ORDER BY nomeClient;");
+
+
+
+    $msgSalvo = 0;
+    return view('newvendasV2', ['estoquesCad'=>$estoquesCad, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo]);
         
     }
 
