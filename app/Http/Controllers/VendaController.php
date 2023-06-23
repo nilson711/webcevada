@@ -93,6 +93,17 @@ class VendaController extends Controller
     public function store(Request $request)
     {
         //
+        // dd('Entrei no stores da Vendas');
+
+        // Criação do novo registro e salva
+        $venda = new Venda();
+        $venda->clientes_id = 1;
+        $venda->save();
+       
+        // Redireciona para a página de edição do registro adicionado
+        return redirect()->route('editvenda', ['venda' => $venda->id]);
+        
+        
     }
 
     /**
@@ -104,6 +115,7 @@ class VendaController extends Controller
     public function show(Venda $venda)
     {
         //
+        
     }
 
     /**
@@ -115,6 +127,49 @@ class VendaController extends Controller
     public function edit(Venda $venda)
     {
         //
+        // Retorna o formulário de edição com o registro especificado
+        // return view('newvendasV2', compact('venda'));
+        
+        $estoquesCad = DB::SELECT("SELECT P.id, P.cod, P.Produto, P.precoVenda,P.precoAtacado, E.qtdComprada, I.qtdVenda, 
+        COALESCE(E.qtdComprada - I.qtdVenda, E.qtdComprada) AS emEstoque
+        FROM produtos AS P
+        LEFT JOIN (
+            SELECT produtos_id, SUM(qtd) AS qtdComprada
+            FROM estoques
+            GROUP BY produtos_id
+        ) AS E ON P.id = E.produtos_id
+        LEFT JOIN (
+            SELECT produto_id, SUM(qtd) AS qtdVenda
+            FROM itens
+            GROUP BY produto_id
+        ) AS I ON P.id = I.produto_id;
+        
+        ");
+
+        $itens = DB::SELECT("SELECT I.vendas_id, I.produto_id, P.Produto, I.qtd, I.vlUnit, I.totItem FROM itens AS I
+                            INNER JOIN produtos as P
+                            ON P.id = I.produto_id
+                            WHERE vendas_id = $venda->id
+                            ;");
+
+        $somaItens = DB::SELECT("SELECT SUM(I.totItem) AS total FROM itens AS I
+                                WHERE vendas_id = $venda->id
+                                GROUP BY I.vendas_id
+                                ;");
+
+        $totalItens = ($somaItens) ? $somaItens[0]->total : 0 ;
+
+        // dd($totalItens);
+
+        
+
+        // dd($totalItens);
+
+        $ClientesCad = DB::SELECT("SELECT *  FROM clientes AS C ORDER BY nomeClient;");
+
+        $msgSalvo = 0;
+        return view('newvendasV2', ['estoquesCad'=>$estoquesCad, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo, 'itens'=>$itens, 'totalItens'=>$totalItens], compact('venda'));
+
     }
 
     /**

@@ -53,6 +53,7 @@ function exibirTresLinhas() {
   
 
 function mostrarValor() {
+  
   var select = document.getElementById("product");
   var checkAtacado = document.getElementById("checkAtacado");
   var option = select.options[select.selectedIndex];

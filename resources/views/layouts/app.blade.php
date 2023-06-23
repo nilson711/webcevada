@@ -53,7 +53,7 @@
                         </div>
 
                         <a href={{route('estoque')}}><button type="button" class="btn btn-outline-primary btn-lg" style="margin-right: 10px">Estoque</button></a>
-                        <a href={{route('vendaold')}}><button type="button" class="btn btn-outline-primary btn-lg" style="margin-right: 10px">Vendas</button></a>
+                        <a href={{route('newvenda')}}><button type="button" class="btn btn-outline-primary btn-lg" style="margin-right: 10px">Vendas</button></a>
                         <a href={{route('financeiro')}}><button type="button" class="btn btn-outline-primary btn-lg" style="margin-right: 10px">Financeiro</button></a>
                     </ul>
                     

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Iten;
+use App\Models\Pagto;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
-class ItenController extends Controller
+class PagtoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,38 +37,41 @@ class ItenController extends Controller
     public function store(Request $request)
     {
         //
-        
-        $itens = json_decode($request->input('allsalesData'));
+      $pagtos = json_decode($request->input('allPagtos'));
 
-        // dd($itens);
+        //   dd($pagtos);
 
-        foreach ($itens as $iten) {
-            // Crie uma nova instância do modelo Venda
-            $novoIten = new Iten();
+        foreach ($pagtos as $pagto) {
+            // Cria uma nova instancia do model Pagto
+            $novoPagto = new Pagto();
+
+            // Converte a data para o formato desejado usando Carbon
+            $dataPagto = Carbon::parse($pagto->data)->format('Y-m-d H:i:s');
+
+
+            // atribui os valores aos campos da tabela pagtos
+            $novoPagto->venda_id = $pagto->idv;
+            $novoPagto->dtPagto = $dataPagto;
+            $novoPagto->forma = $pagto->forma;
+            $novoPagto->valor = $pagto->valor;
             
-            // Atribua os valores aos campos do modelo
-            $novoIten->produto_id = $iten->idProd;
-            $novoIten->qtd = $iten->qtd;
-            $novoIten->vlUnit = $iten->preco;
-            $novoIten->totItem = $iten->subtotal;
-            $novoIten->vendas_id = $iten->idVenda;
+            // Salva
+            $novoPagto->save();
 
-            // $novoIten->produto = $iten->produto;
-            
-            // Salve a nova venda no banco de dados
-            $novoIten->save();
         }
-         // Redireciona para a página de edição do registro adicionado
-         return redirect()->route('editvenda', ['venda' => $iten->idVenda]);
+        
+        // Volta para a venda atual
+        return redirect()->route('editvenda', ['venda' => $pagto->idv]);
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Iten  $iten
+     * @param  \App\Models\Pagto  $pagto
      * @return \Illuminate\Http\Response
      */
-    public function show(Iten $iten)
+    public function show(Pagto $pagto)
     {
         //
     }
@@ -75,10 +79,10 @@ class ItenController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Iten  $iten
+     * @param  \App\Models\Pagto  $pagto
      * @return \Illuminate\Http\Response
      */
-    public function edit(Iten $iten)
+    public function edit(Pagto $pagto)
     {
         //
     }
@@ -87,10 +91,10 @@ class ItenController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Iten  $iten
+     * @param  \App\Models\Pagto  $pagto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Iten $iten)
+    public function update(Request $request, Pagto $pagto)
     {
         //
     }
@@ -98,10 +102,10 @@ class ItenController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Iten  $iten
+     * @param  \App\Models\Pagto  $pagto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Iten $iten)
+    public function destroy(Pagto $pagto)
     {
         //
     }

@@ -64,48 +64,37 @@
                       <input type="number" class="form-control" id="valorInput" step="0.01">
                   </div>
                   <div class="col-md-1">
-                    <button  class="btn btn-primary" id="adicionarPagamentoBtn" style="margin-top: 30px" disabled>Ok</button>
+                    <button type="submit" class="btn btn-primary" id="adicionarPagamentoBtn" style="margin-top: 30px" disabled>Ok</button>
 
                   </div>
               </div>
               <hr>
-              <form id="pagamentosForm" action="/newpagto" method="POST">
-                @csrf
-            
-                <table id="pagamentosTable" class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Forma</th>
-                            <th>Valor</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Linhas da tabela de pagamentos serão adicionadas dinamicamente aqui -->
-                    </tbody>
-                    <tfoot>
-                        <tr style="color: blue">
-                            <th colspan="2">Total Pago</th>
-                            <th id="totalValuePag"></th>
-                        </tr>
-                        <tr style="color: red">
-                            <th colspan="2">Devedor</th>
-                            <th id="totalDevedor">{{$totalItens}}</th>
-                        </tr>
-                        <tr>
-                            <th colspan="2">Saldo</th>
-                            <th id="saldoDevedor"></th>
-                        </tr>
-                        <tr>
-                            <td colspan="3">
-                            </td>
-                          </tr>
-                        </tfoot>
-                      </table>
-                      <input type="text" name="allPagtos"><!--Campo que receberá os datos de pagamento-->
-                      <button type="submit" id="salvarPagtos" class="btn btn-primary">Gravar Pagamentos</button>
-              </form>
-            
+              <table id="pagamentosTable" class="table table-sm">
+                  <thead>
+                      <tr>
+                          <th>Data</th>
+                          <th>Forma</th>
+                          <th>Valor</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <!-- Linhas da tabela de pagamentos serão adicionadas dinamicamente aqui -->
+                  </tbody>
+                  <tfoot>
+                      <tr style="color: blue">
+                          <th colspan="2">Total Pago</th>
+                          <th id="totalValuePag"></th>
+                      </tr>
+                      <tr style="color: red">
+                          <th colspan="2">Devedor</th>
+                          <th id="totalDevedor"></th>
+                      </tr>
+                      <tr>
+                          <th colspan="2">Saldo</th>
+                          <th id="saldoDevedor"></th>
+                      </tr>
+                  </tfoot>
+              </table>
           </div>
           <div class="modal-footer">
               
@@ -205,7 +194,7 @@
                 <hr>
                 <h5>Selecionados</h5>
 
-                <form method="post" id="itensForm" action="/newitens">
+                <form method="post" action="/newitens">
                   @csrf
                     <table id="salesTable" class="table table-sm">
                         <thead>
@@ -220,23 +209,12 @@
                             </tr>
                         </thead>
                         <tbody id="salesData">
-                          @foreach ($itens as $item)
-                          <tr>
-
-                            <td>{{$item->vendas_id}}</td>
-                            <td>{{$item->produto_id}}</td>
-                            <td>{{$item->Produto}}</td>
-                            <td>{{$item->qtd}}</td>
-                            <td>{{$item->vlUnit}}</td>
-                            <td>{{$item->totItem}}</td>
-                          </tr>
-                          @endforeach
                             <!-- Os registros de vendas serão adicionados dinamicamente aqui -->
+                            <td></td>
                         </tbody>
                     </table>
-                    <input type="hidden" name="allsalesData"> <!-- Campo oculto para armazenar os dados da tabela -->
-                    <button id="salvarBtn" class="btn btn-primary" type="submit">Salvar (F8)</button>
-                    <button id="pagtoBtn" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#pagamentosModal">Pagamento (F9)</button>
+                    <input type="text" name="allsalesData"> <!-- Campo oculto para armazenar os dados da tabela -->
+                    <button id="salvarBtn" type="submit">Salvar</button>
                 </form>
                 <div class="row">
                   <div class="col-md-1">
@@ -246,10 +224,11 @@
                     <div id="totalQuantity">Itens: 0</div>
                   </div>
                   <div class="col-md-5" style="color: blue">
-                    <h4 id="totalValue" style="text-align: right; margin-right: 200px"><strong> {{$totalItens}}</strong></h4>
+                    <h4 id="totalValue" style="text-align: right; margin-right: 200px"><strong> R$ Total: 0.00 </strong></h4>
                   </div>
                 </div>
 
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pagamentosModal">Pagamento (F9)</button>
 
 
               </div>
@@ -384,15 +363,8 @@
                                                 }
                     });
 
-                      // Evento de teclado ao pressionar F8
-                    $(document).keydown(function(e) {
-                        if (e.which === 120) { // Código da tecla F9
-                            $('#pagtoBtn').trigger('click');
-                        }
-                    });
-
           </script>
-          
+
           
           <script>
             // Obtém a data atual
@@ -421,7 +393,6 @@
       
       // Cria uma nova linha na tabela
       var newRow = document.createElement('tr');
-      newRow.className = 'pagtos-row'; //Adiciona a classe pagtos-row a linha <tr>
       newRow.innerHTML = '<td>' + dataFormatada + '</td><td>' + forma + '</td><td>' + valor.toFixed(2) + '</td>';
       
       // Adiciona a nova linha à tabela
@@ -550,7 +521,7 @@
   
   // ENVIAR OS ITENS DA TABELA PARA O REQUEST
 
-  $(document).ready(function() {
+$(document).ready(function() {
     $('#salvarBtn').click(function(e) {
         e.preventDefault(); // Evita o envio imediato do formulário
 
@@ -578,84 +549,16 @@
 
             // Adiciona a venda ao array de dados
             data.push(sale);
-        });
+            
+          });
 
         // Adiciona os dados ao campo de formulário antes de enviar
         $('input[name="allsalesData"]').val(JSON.stringify(data));
 
-       // Verifica se o campo allsalesData não é um array vazio
-       if (data.length !== 0) {
-          // Submete o formulário se o array não for vazio
-          // $('form').submit();
-          $('#itensForm').submit();
-        } 
-       
-
-    });
-
-    // Evento de teclado ao pressionar F8
-    $(document).keydown(function(e) {
-        if (e.which === 119) { // Código da tecla F8
-            $('#salvarBtn').trigger('click');
-        }
+        // Submete o formulário
+        $('form').submit();
     });
 });
-
-
-</script>
-
-
-<script>
-
-  // ENVIAR OS PAGAMENTOS PARA O REQUEST
-
-  $(document).ready(function() {
-    $('#salvarPagtos').click(function(e) {
-        e.preventDefault(); // Evita o envio imediato do formulário
-
-        var arrayPagtos = []; // Array para armazenar os dados da tabela
-        var idv = document.getElementById('idVenda').textContent;
-
-        // seleciona o elemento <tr> que contém a classe 'pagtos-row' e busca os dados de cada célula
-        $('.pagtos-row').each(function() {
-            var row = $(this);
-            var data = row.find('td:eq(0)').text();
-            var forma = row.find('td:eq(1)').text();
-            var valor = row.find('td:eq(2)').text();
-
-            // Cria um objeto com os dados da venda atual
-            var pagtos = {
-                idv: idv,
-                data: data,
-                forma: forma,
-                valor: valor
-            };
-
-            // Adiciona o pagto ao array de dados
-            arrayPagtos.push(pagtos);
-        });
-
-        // Adiciona os dados ao campo de formulário antes de enviar
-        $('input[name="allPagtos"]').val(JSON.stringify(arrayPagtos));
-
-       // Verifica se o campo allPagtos não é um array vazio
-       if (arrayPagtos.length !== 0) {
-          // Submete o formulário se o array não for vazio
-          // $('form').submit();
-          $('#pagamentosForm').submit();
-      
-        } 
-       
-    });
-
-    // Evento de teclado ao pressionar F#
-    // $(document).keydown(function(e) {
-    //     if (e.which === 119) { // Código da tecla F#
-    //         $('#salvarPagtos').trigger('click');
-    //     }
-    // });
-});
-
 </script>
 
                 
