@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Venda;
+use App\Models\Pagto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -159,16 +160,22 @@ class VendaController extends Controller
 
         $totalItens = ($somaItens) ? $somaItens[0]->total : 0 ;
 
-        // dd($totalItens);
+        $pagtos = DB::SELECT("SELECT P.dtPagto, P.venda_id, P.forma, P.valor
+                            FROM pagtos AS P
+                            WHERE P.venda_id = $venda->id
+                            ;");
 
-        
+        // dd($pagtos);
+
+
+        // dd($pagtos);
 
         // dd($totalItens);
 
         $ClientesCad = DB::SELECT("SELECT *  FROM clientes AS C ORDER BY nomeClient;");
 
         $msgSalvo = 0;
-        return view('newvendasV2', ['estoquesCad'=>$estoquesCad, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo, 'itens'=>$itens, 'totalItens'=>$totalItens], compact('venda'));
+        return view('newvendasV2', ['estoquesCad'=>$estoquesCad, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo, 'itens'=>$itens, 'totalItens'=>$totalItens, 'pagtos'=>$pagtos], compact('venda'));
 
     }
 

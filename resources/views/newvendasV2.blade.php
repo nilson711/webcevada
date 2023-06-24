@@ -51,8 +51,8 @@
                   </div>
                   <div class="form-group col-md-3">
                       <label for="formaSelect">Forma</label>
-                      <select class="form-control" id="formaSelect">
-                          <option value=" " selected>Selecione...</option>
+                      <select class="form-control" id="formaSelect" required>
+                          <option value= "n" selected>Selecione...</option>
                           <option value="debito">Débito</option>
                           <option value="credito">Crédito</option>
                           <option value="pix">Pix</option>
@@ -82,6 +82,15 @@
                     </thead>
                     <tbody>
                         <!-- Linhas da tabela de pagamentos serão adicionadas dinamicamente aqui -->
+                        @foreach ($pagtos as $pagto)
+                          <tr>
+                            {{-- <td> {{$pagto->dtPagto}} </td> --}}
+                            <td>{{ date('d/m', strtotime($pagto->dtPagto)) }} </td>
+                            
+                            <td>{{$pagto->forma}}</td>
+                            <td>{{$pagto->valor}}</td>
+                          </tr>
+                        @endforeach
                     </tbody>
                     <tfoot>
                         <tr style="color: blue">
@@ -364,6 +373,9 @@
                       $(document).on('select2:open', () => {
                         document.querySelector('.select2-search__field').focus();
                       });
+
+                      // Calcula e atualiza o valor total
+                    calculateTotal();
                     });
                     
           </script>
@@ -412,6 +424,19 @@
       var dataFormatada = moment(data).format('DD-MM-YYYY');
       var forma = document.getElementById('formaSelect').value;
       var valor = parseFloat(document.getElementById('valorInput').value);
+
+      
+    if (forma == 'n' || forma == null || forma == "") {
+
+        alert('é  igual a n, nulo ou vazio');
+      
+    } else {
+      
+        alert(forma);
+
+    }
+      
+   
       
       // Remove a linha em branco, se existir
       var emptyRow = document.getElementById('emptyRow');
@@ -475,11 +500,12 @@
     // Função para habilitar ou desabilitar o botão "adicionarPagamentoBtn"
     function toggleAddButton() {
         var data = document.getElementById('dataInput').value;
+        var forma = document.getElementById('formaSelect').value;
         var valor = document.getElementById('valorInput').value;
 
         var addButton = document.getElementById('adicionarPagamentoBtn');
 
-        if (data.trim() !== '' && valor.trim() !== '') {
+        if (data.trim() !== '' && valor.trim() !== '' && forma.trim() !== 'n' || forma !== null || forma !== '') {
             addButton.disabled = false;
         } else {
             addButton.disabled = true;

@@ -48,7 +48,6 @@ class PagtoController extends Controller
             // Converte a data para o formato desejado usando Carbon
             $dataPagto = Carbon::parse($pagto->data)->format('Y-m-d H:i:s');
 
-
             // atribui os valores aos campos da tabela pagtos
             $novoPagto->venda_id = $pagto->idv;
             $novoPagto->dtPagto = $dataPagto;
@@ -59,6 +58,12 @@ class PagtoController extends Controller
             $novoPagto->save();
 
         }
+
+            $totalPago = DB::SELECT("SELECT SUM(P.valor) as tPag FROM pagtos AS P
+                                    GROUP BY P.venda_id
+                                    ;");
+
+            dd($totalPago);
         
         // Volta para a venda atual
         return redirect()->route('editvenda', ['venda' => $pagto->idv]);
