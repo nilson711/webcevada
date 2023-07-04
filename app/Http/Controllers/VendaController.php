@@ -69,9 +69,14 @@ class VendaController extends Controller
     $ClientesCad = DB::SELECT("SELECT *  FROM clientes AS C ORDER BY nomeClient;");
 
 
+        $totalPago = DB::SELECT("SELECT SUM(P.valor) as tPag FROM pagtos AS P
+        GROUP BY P.venda_id
+        ;");
 
+        dd($totalPago);
+        
     $msgSalvo = 0;
-    return view('newvendasV2', ['estoquesCad'=>$estoquesCad, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo]);
+    return view('newvendasV2', ['estoquesCad'=>$estoquesCad, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo, 'totalPago' => $totalPago]);
         
     }
 
@@ -168,14 +173,36 @@ class VendaController extends Controller
         // dd($pagtos);
 
 
-        // dd($pagtos);
+        $totalPagoArray = DB::SELECT("SELECT SUM(P.valor) as tPag FROM pagtos AS P
+                                WHERE P.venda_id = $venda->id
+                                GROUP BY P.venda_id
+                                ;");
+
+                                
+
+// VERIFICA SE O ARRAY ESTÁ VAZIO
+        if (empty($totalPagoArray)) {
+            // O array está vazio
+            // echo "O array está vazio";
+            $totalPago = 0;
+        } else {
+            // O array não está vazio
+            // echo "O array não está vazio";
+            $totalPago = $totalPagoArray[0]->tPag;
+        }
+
+        // dd($totalPago);
+
+        $saldo  = $totalPago - $totalItens ;
+
+        // dd($saldo);
 
         // dd($totalItens);
 
         $ClientesCad = DB::SELECT("SELECT *  FROM clientes AS C ORDER BY nomeClient;");
 
         $msgSalvo = 0;
-        return view('newvendasV2', ['estoquesCad'=>$estoquesCad, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo, 'itens'=>$itens, 'totalItens'=>$totalItens, 'pagtos'=>$pagtos], compact('venda'));
+        return view('newvendasV2', ['estoquesCad'=>$estoquesCad, 'saldo' => $saldo, 'totalPago' => $totalPago, 'ClientesCad'=>$ClientesCad, 'msgSalvo'=>$msgSalvo, 'itens'=>$itens, 'totalItens'=>$totalItens, 'pagtos'=>$pagtos], compact('venda'));
 
     }
 

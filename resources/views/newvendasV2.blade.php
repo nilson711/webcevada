@@ -51,7 +51,7 @@
                   </div>
                   <div class="form-group col-md-3">
                       <label for="formaSelect">Forma</label>
-                      <select class="form-control" id="formaSelect" required>
+                      <select class="form-control" id="formaSelect" required onchange="habilitaValor()">
                           <option value= "n" selected>Selecione...</option>
                           <option value="debito">Débito</option>
                           <option value="credito">Crédito</option>
@@ -61,7 +61,7 @@
                   </div>
                   <div class="form-group col-md-4">
                       <label for="valorInput">Valor</label>
-                      <input type="number" class="form-control" id="valorInput" step="0.01">
+                      <input type="text" class="form-control" id="valorInput"  disabled>
                   </div>
                   <div class="col-md-1">
                     <button  class="btn btn-primary" id="adicionarPagamentoBtn" style="margin-top: 30px" disabled>Ok</button>
@@ -77,7 +77,7 @@
                         <tr>
                             <th>Data</th>
                             <th>Forma</th>
-                            <th>Valor</th>
+                            <th class="text-right">Valor</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,22 +88,22 @@
                             <td>{{ date('d/m', strtotime($pagto->dtPagto)) }} </td>
                             
                             <td>{{$pagto->forma}}</td>
-                            <td>{{$pagto->valor}}</td>
+                            <td class="celula text-right">{{$pagto->valor}}</td>
                           </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr style="color: blue">
                             <th colspan="2">Total Pago</th>
-                            <th id="totalValuePag"></th>
+                            <td id="totalValuePag" class="celula text-right">{{$totalPago}}</td>
                         </tr>
                         <tr style="color: red">
                             <th colspan="2">Devedor</th>
-                            <th id="totalDevedor">{{$totalItens}}</th>
+                            <td id="totalDevedor" class="celula text-right">{{$totalItens}}</td>
                         </tr>
                         <tr>
                             <th colspan="2">Saldo</th>
-                            <th id="saldoDevedor"></th>
+                            <td id="saldoDevedor" class="celula text-right {{$saldo < 0 ? 'text-danger' : ''}}" >{{$saldo}} </td>
                         </tr>
                         <tr>
                             <td colspan="3">
@@ -222,9 +222,9 @@
                                 <th>IdVenda</th>
                                 <th>IdProd</th>
                                 <th>Produto</th>
-                                <th>Qtd</th>
-                                <th>Preço</th>
-                                <th>Subtotal</th>
+                                <th class="text-center">Qtd</th>
+                                <th class="text-right">Preço</th>
+                                <th class="text-right">Subtotal</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -235,9 +235,9 @@
                             <td>{{$item->vendas_id}}</td>
                             <td>{{$item->produto_id}}</td>
                             <td>{{$item->Produto}}</td>
-                            <td>{{$item->qtd}}</td>
-                            <td>{{$item->vlUnit}}</td>
-                            <td>{{$item->totItem}}</td>
+                            <td class="text-center">{{$item->qtd}}</td>
+                            <td class="celula text-right">{{$item->vlUnit}}</td>
+                            <td class="celula text-right">{{$item->totItem}}</td>
                           </tr>
                           @endforeach
                             <!-- Os registros de vendas serão adicionados dinamicamente aqui -->
@@ -245,17 +245,23 @@
                     </table>
                     <input type="hidden" name="allsalesData"> <!-- Campo oculto para armazenar os dados da tabela -->
                     <button id="salvarBtn" class="btn btn-primary" type="submit">Salvar (F8)</button>
-                    <button id="pagtoBtn" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#pagamentosModal">Pagamento (F9)</button>
+                    <button id="pagtoBtn" type="button" class="btn btn-primary"  data-toggle="modal" disabled data-target="#pagamentosModal">Pagamento (F9)</button>
                 </form>
                 <div class="row">
                   <div class="col-md-1">
                     <div id="rowCount">Linhas: 0</div>
                   </div>
-                  <div class="col-md-6" style="text-align: right">
+                  <div class="col-md-6 text-right">
                     <div id="totalQuantity">Itens: 0</div>
                   </div>
                   <div class="col-md-5" style="color: blue">
-                    <h4 id="totalValue" style="text-align: right; margin-right: 200px"><strong> {{$totalItens}}</strong></h4>
+                    <h4 id="totalValue" class="text-right" style="margin-right: 20px"><strong><span class="celula"> {{$totalItens}} </span></strong></h4>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <h4 class="text-right text-success" style="margin-right: 20px">Pago: <span class="celula"> {{$totalPago}} </span></h4>
+
                   </div>
                 </div>
 
@@ -385,18 +391,32 @@
                 // Ao pressionar a tecla F9 abre o modal de pagamentos
                   document.addEventListener('keydown', function(event) {
                       // Verifica se a tecla pressionada é a tecla F9 (código 120)
-                      if (event.keyCode === 120) {
-                          // Abre o modal de pagamentos
-                          $('#pagamentosModal').modal('show');
-                          
-                           // Move o foco para o elemento formaSelect após 2 segundos
-                            setTimeout(function() {
-                                document.getElementById('formaSelect').focus();
-                            }, 2000);
-                                                }
+
+                      // Verifica se o total é maior que zero
+                      total = document.getElementById('totalDevedor').textContent;
+                      // console.log(total);
+                    
+                      
+
+                      if (document.getElementById('pagtoBtn').disabled) {
+                          console.log('está desabilitado');
+                        } else {
+                        console.log('está habilitado');
+                        
+                          if (event.keyCode === 120) {
+                              // Abre o modal de pagamentos
+                              $('#pagamentosModal').modal('show');
+                              
+                              // Move o foco para o elemento formaSelect após 2 segundos
+                                setTimeout(function() {
+                                    document.getElementById('formaSelect').focus();
+                                }, 2000);
+                                                    }
+                      }
+                      
                     });
 
-                      // Evento de teclado ao pressionar F8
+                      // Evento de teclado ao pressionar F9
                     $(document).keydown(function(e) {
                         if (e.which === 120) { // Código da tecla F9
                             $('#pagtoBtn').trigger('click');
@@ -423,21 +443,8 @@
       var data = document.getElementById('dataInput').value;
       var dataFormatada = moment(data).format('DD-MM-YYYY');
       var forma = document.getElementById('formaSelect').value;
-      var valor = parseFloat(document.getElementById('valorInput').value);
+      var valor = document.getElementById('valorInput').value;
 
-      
-    if (forma == 'n' || forma == null || forma == "") {
-
-        alert('é  igual a n, nulo ou vazio');
-      
-    } else {
-      
-        alert(forma);
-
-    }
-      
-   
-      
       // Remove a linha em branco, se existir
       var emptyRow = document.getElementById('emptyRow');
       if (emptyRow) {
@@ -447,7 +454,7 @@
       // Cria uma nova linha na tabela
       var newRow = document.createElement('tr');
       newRow.className = 'pagtos-row'; //Adiciona a classe pagtos-row a linha <tr>
-      newRow.innerHTML = '<td>' + dataFormatada + '</td><td>' + forma + '</td><td>' + valor.toFixed(2) + '</td>';
+      newRow.innerHTML = '<td>' + dataFormatada + '</td><td>' + forma + '</td><td>' + valor + '</td>';
       
       // Adiciona a nova linha à tabela
       var tableBody = document.getElementById('pagamentosTable').getElementsByTagName('tbody')[0];
@@ -457,6 +464,7 @@
       document.getElementById('dataInput').value = '';
       document.getElementById('formaSelect').value = '';
       document.getElementById('valorInput').value = '';
+      document.getElementById('valorInput').disabled = true;
       
       // Calcula e atualiza o valor total
       calculateTotal();
@@ -466,6 +474,7 @@
   function calculateTotal() {
       var total = 0;
       var vlDevedorModal = document.getElementById('totalDevedor').textContent;
+      var vlDevedorModalnr = parseFloat(vlDevedorModal);
       var saldo = 0;
       
       
@@ -474,19 +483,24 @@
       
       // Percorre as linhas e acumula os valores
       for (var i = 0; i < rows.length; i++) {
-          var valorCell = rows[i].getElementsByTagName('td')[2];
-          var valor = parseFloat(valorCell.innerText);
-          
-          if (!isNaN(valor)) {
-              total += valor;
-          }
+        var valorCell = rows[i].getElementsByTagName('td')[2];
+        var valor = parseFloat(valorCell.innerText);
+        
+        if (!isNaN(valor)) {
+          total += valor;
+        }else{
+          total = 0;
+        }
       }
       
       // Atualiza o valor total na tabela
-      document.getElementById('totalValuePag').innerText = total.toFixed(2);
-      saldo = vlDevedorModal - total ;
-      document.getElementById('saldoDevedor').innerText = saldo.toFixed(2);
-
+      // document.getElementById('totalValuePag').innerText = total;
+      saldo = vlDevedorModalnr - total ;
+      // document.getElementById('saldoDevedor').innerText = saldo;
+      
+      
+      // console.log(valor);
+      // console.log(vlDevedorModalnr);
       // console.log(saldo);
 }
 
@@ -615,7 +629,6 @@
           // $('form').submit();
           $('#itensForm').submit();
         } 
-       
 
     });
 
@@ -623,6 +636,7 @@
     $(document).keydown(function(e) {
         if (e.which === 119) { // Código da tecla F8
             $('#salvarBtn').trigger('click');
+            document.getElementById('pagtoBtn').disabled=false;
         }
     });
 });
@@ -647,7 +661,7 @@
             var row = $(this);
             var data = row.find('td:eq(0)').text();
             var forma = row.find('td:eq(1)').text();
-            var valor = row.find('td:eq(2)').text();
+            var valor = row.find('td:eq(2)').text().replace(',', '.');
 
             // Cria um objeto com os dados da venda atual
             var pagtos = {
@@ -684,6 +698,17 @@
 
 </script>
 
+<script>
+  // FORMATA O VALOR PARA DUAS CASA DECIMAIS
+  const celulas = document.getElementsByClassName('celula');
+
+  for (let i = 0; i < celulas.length; i++) {
+    const numero = parseFloat(celulas[i].textContent);
+    const numeroFormatado = numero.toFixed(2).replace('.', ',');
+    // const numeroFormatado = numero.toFixed(2);
+    celulas[i].textContent = numeroFormatado;
+  }
+</script>
                 
 
        

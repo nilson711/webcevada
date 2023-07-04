@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pagto;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PagtoController extends Controller
 {
@@ -59,11 +60,7 @@ class PagtoController extends Controller
 
         }
 
-            $totalPago = DB::SELECT("SELECT SUM(P.valor) as tPag FROM pagtos AS P
-                                    GROUP BY P.venda_id
-                                    ;");
-
-            dd($totalPago);
+        // dd($totalPago);
         
         // Volta para a venda atual
         return redirect()->route('editvenda', ['venda' => $pagto->idv]);

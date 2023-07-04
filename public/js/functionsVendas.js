@@ -128,3 +128,18 @@ function somarQuantidade() {
 }
 
 
+function habilitaValor(){
+ var forma = document.getElementById('formaSelect').value;
+
+  if (forma == 'n' || forma == null || forma == "") {
+
+        // alert('é  igual a n, nulo ou vazio');
+        document.getElementById('valorInput').disabled = true;
+    } else {
+        // alert(forma);
+        document.getElementById('valorInput').disabled = false;
+        // console.log(parseFloat(document.getElementById('totalDevedor').textContent).toFixed(2));
+        document.getElementById('valorInput').value = document.getElementById('totalDevedor').textContent;
+        document.getElementById('valorInput').focus();
+    }
+}
