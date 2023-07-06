@@ -131,15 +131,53 @@ function somarQuantidade() {
 function habilitaValor(){
  var forma = document.getElementById('formaSelect').value;
 
+ // Se a forma de pagamento for nula vazia ou n desabilita o input de valor e btn OK
+//  Se não for habilita input valor atribui o valor do saldo devedor e habilita o btn OK
   if (forma == 'n' || forma == null || forma == "") {
 
-        // alert('é  igual a n, nulo ou vazio');
         document.getElementById('valorInput').disabled = true;
-    } else {
-        // alert(forma);
-        document.getElementById('valorInput').disabled = false;
-        // console.log(parseFloat(document.getElementById('totalDevedor').textContent).toFixed(2));
-        document.getElementById('valorInput').value = document.getElementById('totalDevedor').textContent;
-        document.getElementById('valorInput').focus();
-    }
+        document.getElementById('adicionarPagamentoBtn').disabled = true;
+
+  } else {
+
+    document.getElementById('valorInput').disabled = false;
+    document.getElementById('adicionarPagamentoBtn').disabled = false;
+    // console.log(parseFloat(document.getElementById('totalDevedor').textContent).toFixed(2));
+
+    var saldoDevedorElement = document.getElementById('saldoDevedor');
+    var saldoDevedorTexto = saldoDevedorElement.textContent.replace(',', '.'); // Substitui ',' por '.' para o parseFloat funcionar corretamente
+    var saldoDevedorNumero = parseFloat(saldoDevedorTexto);
+    var saldoDevedorPositivo = Math.abs(saldoDevedorNumero);
+
+    // document.getElementById('valorInput').value = document.getElementById('saldoDevedor').textContent;
+    document.getElementById('valorInput').value = saldoDevedorPositivo;
+
+      if (forma == 'dinheiro') {
+        console.log('sim é dinheiro');
+       document.getElementById('divdinheiroRec').style.display = "block";
+       document.getElementById('dinheiroRec').focus();
+       
+        
+      } else {
+        console.log('é outra forma de pagto');
+        document.getElementById('adicionarPagamentoBtn').focus();
+        
+      }
+
+}
+}
+
+function calcTroco(){
+  var saldoDevedorElement = document.getElementById('valorInput');
+    var saldoDevedorTexto = saldoDevedorElement.value; // Substitui ',' por '.' para o parseFloat funcionar corretamente
+    var saldoDevedorNumero = parseFloat(saldoDevedorTexto);
+    var saldoDevedorPositivo = Math.abs(saldoDevedorNumero);
+    var inputTroco = document.getElementById('troco');
+
+    var dinheiroRec = document.getElementById('dinheiroRec').value;
+    var troco = dinheiroRec - saldoDevedorPositivo;
+    
+    inputTroco.value = troco.toFixed(2);
+    
+  console.log(troco);
 }

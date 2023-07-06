@@ -18,6 +18,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-ABC123..." crossorigin="anonymous">
+
     
 
     <!-- Select2 -->
@@ -44,29 +47,51 @@
               </button>
           </div>
           <div class="modal-body">
+            
+           
+                <div class="form-row" id="inputsPagts">
+                    <div class="form-group col-md-4">
+                        <label for="dataInput">Data</label>
+                        <input type="date" class="form-control" id="dataInput">
+                    </div>
+                    <div class="form-group col-md-3" style="display:inline">
+                        <label for="formaSelect">Forma</label>
+                        <select class="form-control" id="formaSelect" required onchange="habilitaValor()">
+                            <option value= "n" selected>Selecione...</option>
+                            <option value="debito">Débito</option>
+                            <option value="credito">Crédito</option>
+                            <option value="pix">Pix</option>
+                            <option value="dinheiro">Dinheiro</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="valorInput">Valor</label>
+                        <input type="text" class="form-control" id="valorInput"  disabled>
+                    </div>
+                    <div class="col-md-1">
+                      <label for="adicionarPagamentoBtn">Shift+F7</label>
+                      <button  class="btn btn-primary" id="adicionarPagamentoBtn" disabled>Ok</button>
+
+                    </div>
+                </div>
+           
               <div class="form-row">
-                  <div class="form-group col-md-4">
-                      <label for="dataInput">Data</label>
-                      <input type="date" class="form-control" id="dataInput">
-                  </div>
-                  <div class="form-group col-md-3">
-                      <label for="formaSelect">Forma</label>
-                      <select class="form-control" id="formaSelect" required onchange="habilitaValor()">
-                          <option value= "n" selected>Selecione...</option>
-                          <option value="debito">Débito</option>
-                          <option value="credito">Crédito</option>
-                          <option value="pix">Pix</option>
-                          <option value="dinheiro">Dinheiro</option>
-                      </select>
-                  </div>
-                  <div class="form-group col-md-4">
-                      <label for="valorInput">Valor</label>
-                      <input type="text" class="form-control" id="valorInput"  disabled>
-                  </div>
-                  <div class="col-md-1">
-                    <button  class="btn btn-primary" id="adicionarPagamentoBtn" style="margin-top: 30px" disabled>Ok</button>
+                <div class="form-group" id="divdinheiroRec" style="display: none">
+                  <div class="row">
+                    <div class="col-5">
+                      <label for="dinheiroRec">Dinheiro</label>
+                      <input type="text" class="form-control" name="dinheiroRec" id="dinheiroRec" placeholder="Digite o valor recebido" onchange="calcTroco()">
+                    </div>
+                    <div class="col-5">
+                      <label for="troco">Troco</label>
+                      <input type="text" class="form-control" name="troco" id="troco" disabled>
+  
+                    </div>
 
                   </div>
+
+                </div>
+
               </div>
               <hr>
               <form id="pagamentosForm" action="/newpagto" method="POST">
@@ -111,8 +136,9 @@
                           </tr>
                         </tfoot>
                       </table>
-                      <input type="text" name="allPagtos"><!--Campo que receberá os datos de pagamento-->
-                      <button type="submit" id="salvarPagtos" class="btn btn-primary">Gravar Pagamentos</button>
+                      <input type="hidden" name="allPagtos"><!--Campo que receberá os datos de pagamento-->
+                      <button type="submit" id="salvarPagtos" class="btn btn-primary">Gravar Pagamentos (Shift+F8)</button>
+                      
               </form>
             
           </div>
@@ -131,7 +157,6 @@
         <div class="container">
             <div class="row justify-content-center">
               
-              
               <div class="col-md-12">
                 @if ($errors->any())
                   <div style="position: absolute; top:0px; left:0px; width:100%; color:white; background-color: red; text-align:center">
@@ -147,8 +172,15 @@
                   
                   <div  >
                     <div class="row">
-                      <div class="col-md-3" style="margin: 3px">
-                        <h1>Vendas V2</h1>
+                      <div class="col-md-3">
+                        <div class="row">
+                          <a class="navbar-brand" href="{{ url('/home') }}">
+                            {{-- {{ config('app.name', 'WebCevada') }} --}}
+                            <i class="fas fa-home fa-lg"></i> <!-- Ícone do foguete -->
+                          </a>
+                          <h1>Vendas</h1>
+
+                        </div>
                       </div>
           
                       <div class="form-group col-md-4">
@@ -245,7 +277,8 @@
                     </table>
                     <input type="hidden" name="allsalesData"> <!-- Campo oculto para armazenar os dados da tabela -->
                     <button id="salvarBtn" class="btn btn-primary" type="submit">Salvar (F8)</button>
-                    <button id="pagtoBtn" type="button" class="btn btn-primary"  data-toggle="modal" disabled data-target="#pagamentosModal">Pagamento (F9)</button>
+                    <button id="pagtoBtn" type="button" class="btn btn-primary"  data-toggle="modal"  data-target="#pagamentosModal">Pagamento (F9)</button>
+                    <a href={{route('newvenda')}}><button type="button" class="btn btn-primary" id="newVenda" style="margin-right: 10px">Nova Venda (Shift+F2)</button></a>
                 </form>
                 <div class="row">
                   <div class="col-md-1">
@@ -260,7 +293,7 @@
                 </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <h4 class="text-right text-success" style="margin-right: 20px">Pago: <span class="celula"> {{$totalPago}} </span></h4>
+                    <h4 class="text-right text-success" style="margin-right: 20px">Pago: <span class="celula" id="totalPago"> {{$totalPago}} </span></h4>
 
                   </div>
                 </div>
@@ -317,8 +350,8 @@
                 // Atualiza a exibição do valor total
                
                 // document.getElementById('totalValue').textContent = 'Valor Total: R$ ' + total.toFixed(2);
-                totalValueElement.textContent = 'R$ Total: ' + total.toFixed(2);
-                totalValueModalElement.textContent = total.toFixed(2);
+                // totalValueElement.textContent = 'R$ Total: ' + total;
+                totalValueModalElement.textContent = total;
 
                 // Adiciona o valor selecionado ao array
                 productValues.push(productSelect.value);
@@ -390,22 +423,34 @@
                 // Adiciona um evento de teclado ao documento
                 // Ao pressionar a tecla F9 abre o modal de pagamentos
                   document.addEventListener('keydown', function(event) {
-                      // Verifica se a tecla pressionada é a tecla F9 (código 120)
 
-                      // Verifica se o total é maior que zero
                       total = document.getElementById('totalDevedor').textContent;
                       // console.log(total);
                     
-                      
-
                       if (document.getElementById('pagtoBtn').disabled) {
-                          console.log('está desabilitado');
-                        } else {
-                        console.log('está habilitado');
+                          // console.log('está desabilitado');
+                      } else {
+                        // console.log('está habilitado');
                         
                           if (event.keyCode === 120) {
                               // Abre o modal de pagamentos
                               $('#pagamentosModal').modal('show');
+
+                              tDev = document.getElementById('totalDevedor').textContent;
+                              tPag = document.getElementById('totalValuePag').textContent;
+                               
+                              // Se o total Devedor for maior que o total pago torna os inputs de pagamento visíveis
+                              if (tDev > tPag ) {
+                                document.getElementById('inputsPagts').style.visibility = "visible";
+                                document.getElementById('salvarPagtos').style.visibility = "visible";
+                              } else {
+                                // AQUI
+                                document.getElementById('inputsPagts').style.visibility = "hidden";
+                                document.getElementById('salvarPagtos').style.visibility = "hidden";
+                                
+                              }
+
+                              
                               
                               // Move o foco para o elemento formaSelect após 2 segundos
                                 setTimeout(function() {
@@ -444,7 +489,7 @@
       var dataFormatada = moment(data).format('DD-MM-YYYY');
       var forma = document.getElementById('formaSelect').value;
       var valor = document.getElementById('valorInput').value;
-
+    
       // Remove a linha em branco, se existir
       var emptyRow = document.getElementById('emptyRow');
       if (emptyRow) {
@@ -455,6 +500,8 @@
       var newRow = document.createElement('tr');
       newRow.className = 'pagtos-row'; //Adiciona a classe pagtos-row a linha <tr>
       newRow.innerHTML = '<td>' + dataFormatada + '</td><td>' + forma + '</td><td>' + valor + '</td>';
+
+      newRow.style.backgroundColor = 'lightblue'; // Define a cor de fundo como lightblue
       
       // Adiciona a nova linha à tabela
       var tableBody = document.getElementById('pagamentosTable').getElementsByTagName('tbody')[0];
@@ -536,6 +583,8 @@
         // document.getElementById('dataInput').value = '';
         document.getElementById('formaSelect').value = '';
         document.getElementById('valorInput').value = '';
+        document.getElementById('dinheiroRec').value = '';
+        document.getElementById('troco').value = '';
 
         // Desabilita o botão "adicionarPagamentoBtn" novamente
         toggleAddButton();
@@ -634,9 +683,21 @@
 
     // Evento de teclado ao pressionar F8
     $(document).keydown(function(e) {
+
+      var tPag = document.getElementById('totalPago').textContent;
+      var tVenda = document.getElementById('totalValue').textContent;
+      
         if (e.which === 119) { // Código da tecla F8
             $('#salvarBtn').trigger('click');
-            document.getElementById('pagtoBtn').disabled=false;
+
+            // tPag == '0,00' ? console.log('é zero') : console.log(tPag);
+            // Habilitar botão Pagamento quando valor pago for menor que o valor do débito
+            if (tPag < tVenda) {
+              console.log('não pagou tudo');
+              document.getElementById('pagtoBtn').disabled=false;
+            }
+
+            
         }
     });
 });
@@ -710,6 +771,43 @@
   }
 </script>
                 
+<script>
+  // GRAVAR PAGAMENTOS AO PRESSIONAR SHIF+F8
+  var gravarPagtos = document.getElementById("salvarPagtos");
+
+  document.addEventListener("keydown", function(event) {
+    if (event.shiftKey && event.keyCode === 119) { // 119 é o código da tecla F8
+      gravarPagtos.click();
+    }
+  });
+
+</script>
+
+<script>
+  // LANÇA O VALOR DO PAGAMENTO AO PRESSIONAR O BTN OK
+  var addPagtos = document.getElementById("adicionarPagamentoBtn");
+
+  document.addEventListener("keydown", function(event) {
+    if (event.shiftKey && event.keyCode === 118) { // 118 é o código da tecla F7
+      addPagtos.click();
+    }
+  });
+
+</script>
+
+<script>
+  // ABRE NOVA VENDA BOTÃO NOVA VENDA
+  var newVenda = document.getElementById("newVenda");
+
+  document.addEventListener("keydown", function(event) {
+    if (event.shiftKey && event.keyCode === 113) { // 113 é o código da tecla F2
+      newVenda.click();
+    }
+  });
+
+</script>
+
+
 
        
 
