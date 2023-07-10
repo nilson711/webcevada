@@ -62,7 +62,7 @@
                     </div>
                     <div class="col-md-3">
                         <label for="custoTotal">Custo Total</label>
-                        <input type="text" class="form-control" title="Custo Total" name="custoTotal" id="custoTotal" required readonly>
+                        <input type="text" class="form-control" title="Custo Total" name="custoTotal" id="custoTotal" onchange="calculaCustoUnit()" required>
                     </div>
                     <div class="col-md-2">
                         <label for="vlVenda">Venda Varejo</label>

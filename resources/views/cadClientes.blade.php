@@ -24,6 +24,9 @@
         <div class="modal-body">
             
             <div class="form-group">
+              
+              <input type="hidden" name="users_id" id="users_id" value="{{$idUser}}">
+
               <label for="Cliente">Nome:</label>
               <input type="text" class="form-control" id="Cliente" name="nomeClient" onkeydown="upperCaseF(this)" required placeholder="Nome do Cliente" value="{{old('nomeClient')}}" >
               <div style="color:red">{{$errors->has('Cliente') ? $errors->first('Cliente') : ''}} </div>
@@ -69,6 +72,7 @@
             @csrf
 
             <div class="form-group">
+              <input type="hidden" name="users_idEdit" id="users_idEdit" value="{{$idUser}}">
               <label for="Cliente">Nome:</label>
               <input type="hidden" name="IdClient" id="IdClient" class="editInput">
               <input type="text" class="form-control editInput" id="newCliente" name="newCliente" onkeydown="upperCaseF(this)" required placeholder="Nome do Cliente" value="{{old('newCliente')}}" >

@@ -24,8 +24,8 @@ class EstoqueController extends Controller
     Caso o valor de qtdVenda seja NULL a função COALESCE retorna a qtdComprada para a coluna emEstoque
     */
 
-    $estoquesCad = DB::SELECT("SELECT P.id, P.cod, P.Produto, E.qtdComprada, I.qtdVenda, 
-                        COALESCE(E.qtdComprada - I.qtdVenda, E.qtdComprada) AS emEstoque
+    $estoquesCad = DB::SELECT("SELECT P.id, P.cod, P.Produto, E.qtdComprada, I.qtdVenda,
+                        COALESCE(E.qtdComprada - I.qtdVenda, E.qtdComprada) AS emEstoque -- retorna o primeiro valor não nulo encontrado na lista
                         FROM produtos AS P
                         LEFT JOIN (
                             SELECT produtos_id, SUM(qtd) AS qtdComprada

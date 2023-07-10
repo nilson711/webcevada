@@ -279,6 +279,7 @@
                     <button id="salvarBtn" class="btn btn-primary" type="submit">Salvar (F8)</button>
                     <button id="pagtoBtn" type="button" class="btn btn-primary"  data-toggle="modal"  data-target="#pagamentosModal">Pagamento (F9)</button>
                     <a href={{route('newvenda')}}><button type="button" class="btn btn-primary" id="newVenda" style="margin-right: 10px">Nova Venda (Shift+F2)</button></a>
+                    <input type="hidden" name="valorProdutos" id="valorProdutos" value="{{$totalItens}} ">
                 </form>
                 <div class="row">
                   <div class="col-md-1">

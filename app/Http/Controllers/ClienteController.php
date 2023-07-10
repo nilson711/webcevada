@@ -17,8 +17,18 @@ class ClienteController extends Controller
     {
         //
 
-        $ClientesCad = DB::SELECT("SELECT *  FROM clientes AS C ORDER BY nomeClient;");
-        return view('cadClientes', ['ClientesCad'=>$ClientesCad]);
+             // verifica se o usuário está logado e busca as informações dele
+             if(auth()->check()) {
+                $idUser = auth()->user()->id;
+                $nameUser = auth()->user()->name;
+            }
+
+        $ClientesCad = DB::SELECT("SELECT id, nomeClient, EndClient, tel1Client, tel2Client, users_id  FROM clientes AS C 
+                                    WHERE C.users_id = $idUser
+                                    ORDER BY nomeClient
+                                ;");
+
+        return view('cadClientes', ['ClientesCad'=>$ClientesCad, 'idUser'=>$idUser]);
     }
 
     /**
@@ -43,6 +53,7 @@ class ClienteController extends Controller
         // dd($request->all());
         $TBCliente = new Cliente;
         $TBCliente->create($request->all());
+        
         return redirect()->route('cadClientes');
     }
 
@@ -81,7 +92,12 @@ class ClienteController extends Controller
         // dd($request->all());
 
         Cliente::where('id', $request->IdClient)
-        ->update(['nomeClient' => $request->input('newCliente'), 'EndClient' => $request->input('newEnd'), 'tel1Client' =>$request->input('newTel') ]);
+        ->update(
+            ['nomeClient' => $request->input('newCliente'), 
+            'EndClient' => $request->input('newEnd'), 
+            'tel1Client' =>$request->input('newTel'),
+            'users_id' =>$request->input('users_idEdit')
+        ]);
 
         // $produtosCad = DB::SELECT("SELECT *  FROM produtos AS P ORDER BY Produto;");
         // $msgSalvo = 1;

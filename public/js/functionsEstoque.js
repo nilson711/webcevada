@@ -7,6 +7,14 @@ function calculaCustoAddEstoque() {
 
 }
 
+function calculaCustoUnit(){
+
+    var qtd = document.getElementById('qtd').value;
+    var custoTotal = document.getElementById('custoTotal').value;
+    document.getElementById('unit').value = custoTotal / qtd;
+
+}
+
 function calculaLucroVarejo(){
 
     var vlCompra = document.getElementById('unit').value;
@@ -46,7 +54,7 @@ function calculaLucroAtacado(){
        
     } else {
         var lucro = vlAtacado - vlCompra;
-        var porcent = (lucro / vlCompra)*100
+        var porcent = (lucro / vlCompra)*100;
         var porcentFormat = porcent.toFixed(2);
         document.getElementById('margemAtacado').innerHTML = porcentFormat + "%";
         document.getElementById('margemAtacado').style.backgroundColor = "";

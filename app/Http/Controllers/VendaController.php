@@ -101,9 +101,17 @@ class VendaController extends Controller
         //
         // dd('Entrei no stores da Vendas');
 
+        $idUser = auth()->user()->id;
+
+        $balcao = DB::SELECT("SELECT id, nomeClient, EndClient, tel1Client, tel2Client, users_id  FROM clientes AS C 
+                                WHERE C.users_id = $idUser AND C.nomeClient = 'BALCÃO'
+                                ;");
+
+        $idBalcao = $balcao[0]->id;
+
         // Criação do novo registro e salva
         $venda = new Venda();
-        $venda->clientes_id = 1;
+        $venda->clientes_id = $idBalcao;
         $venda->save();
        
         // Redireciona para a página de edição do registro adicionado
@@ -178,9 +186,7 @@ class VendaController extends Controller
                                 GROUP BY P.venda_id
                                 ;");
 
-                                
-
-// VERIFICA SE O ARRAY ESTÁ VAZIO
+        // VERIFICA SE O ARRAY ESTÁ VAZIO
         if (empty($totalPagoArray)) {
             // O array está vazio
             // echo "O array está vazio";
