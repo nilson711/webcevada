@@ -40,6 +40,7 @@ Route::post('/editProductSubmit/{id}', [App\Http\Controllers\ProdutoController::
 Route::get('/vendas', [App\Http\Controllers\VendaController::class, 'index'])->name('venda');
 Route::get('/newvenda', [App\Http\Controllers\VendaController::class, 'store'])->name('newvenda');
 Route::get('/editvenda/{venda}', [App\Http\Controllers\VendaController::class, 'edit'])->name('editvenda');
+Route::post('/updatevenda/{venda}', [App\Http\Controllers\VendaController::class, 'update'])->name('updatevenda');
 
 Route::get('/vendas_old', [App\Http\Controllers\VendaController::class, 'old'])->name('vendaold');
 // Route::get('/venda/{venda}/edit', [VendaController::class, 'edit'])->name('venda.edit');

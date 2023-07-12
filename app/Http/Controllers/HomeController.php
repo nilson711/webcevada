@@ -27,7 +27,9 @@ class HomeController extends Controller
     {
         
         $comandas = DB::SELECT("SELECT V.id, C.nomeClient, V.data, V.valorProdutos, 
-                                COALESCE(SUM(P.valor), 0) AS pgts
+                                COALESCE(SUM(P.valor), 0) AS pgts,
+                                (V.valorProdutos - COALESCE(SUM(P.valor), 0)) AS diferenca
+                                
                                  FROM vendas AS V
                                 LEFT JOIN clientes AS C
                                 ON C.id = V.clientes_id
@@ -40,12 +42,26 @@ class HomeController extends Controller
                                 HAVING pgts < V.valorProdutos
 
                                 ;");
+        
+        
+        $somaTotalDiferenca = 0;
+
+        // Soma o valor da diferença
+        foreach ($comandas as $comanda) {
+            $somaTotalDiferenca += $comanda->diferenca;
+        }
+        
+
+        // dd($somaTotalDiferenca);
+        
+           $caixa = DB::SELECT("SELECT P.dtPagto, COALESCE(SUM(P.valor), 0) AS pgts FROM pagtos AS P
+                                WHERE DATE(P.dtPagto) = CURDATE()
+                                GROUP BY P.dtPagto
+                                ;");
 
 
 
-        dd($comandas);  
-
-    return view('home', ['comandas' => $comandas]);
+    return view('home', ['comandas' => $comandas, 'caixa' => $caixa[0], 'somaTotalDiferenca' => $somaTotalDiferenca]);
 
     }
 }

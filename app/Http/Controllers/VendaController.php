@@ -219,9 +219,17 @@ class VendaController extends Controller
      * @param  \App\Models\Venda  $venda
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Venda $venda)
+    public function update(Request $request, $id)
     {
         //
+        // dd($request->input('cliente'));
+        
+              // atualiza o cliente da venda
+              Venda::where('id', $id)
+                    ->update(['clientes_id' => $request->input('cliente')]);
+        
+              // Redireciona para a página de edição do registro adicionado
+            return redirect()->route('editvenda', ['venda' => $id]);
     }
 
     /**

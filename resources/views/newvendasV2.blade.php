@@ -176,7 +176,7 @@
                         <div class="row">
                           <a class="navbar-brand" href="{{ url('/home') }}">
                             {{-- {{ config('app.name', 'WebCevada') }} --}}
-                            <i class="fas fa-home fa-lg"></i> <!-- Ícone do foguete -->
+                            <i class="fas fa-home fa-lg"></i>
                           </a>
                           <h1>Vendas</h1>
 
@@ -184,18 +184,33 @@
                       </div>
           
                       <div class="form-group col-md-4">
-                        <small>Cliente</small>
-                          <select class="form-control form-control-sm">
-                           
-                            @foreach ($ClientesCad as $Cliente)
-                              
-                              <option value="{{ $Cliente->id }}"
-                                {{ $Cliente->id == $venda->clientes_id ? 'selected' : '' }}>
-                                {{ $Cliente->nomeClient }}
-                              </option>
+                        <form action="/updatevenda/{{$venda->id}}" method="post">
+                          @csrf
+                          <div class="row">
 
-                            @endforeach
-                          </select>
+                              <div class="col-md-10">
+                                
+                                <small>Cliente</small>
+                                <select class="form-control form-control-sm" id="cliente" name="cliente">
+                                  
+                                  @foreach ($ClientesCad as $Cliente)
+                                  
+                                  <option value="{{ $Cliente->id }}"
+                                    {{ $Cliente->id == $venda->clientes_id ? 'selected' : '' }}>
+                                    {{ $Cliente->nomeClient }}
+                                  </option>
+                                  
+                                  @endforeach
+                                </select>
+
+                              </div>
+
+                              <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary" style="margin-top: 15px"><i class="fas fa-save"></i></button>
+                              </div>
+
+                          </div>
+                          </form>
                       </div>
           
                       <div class="form-group col-md-4" style="text-align: right">

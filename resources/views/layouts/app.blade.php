@@ -103,6 +103,18 @@
         </main>
 
     </div>
+
+    <script>
+        // FORMATA O VALOR PARA DUAS CASA DECIMAIS
+        const celulas = document.getElementsByClassName('celula');
+      
+        for (let i = 0; i < celulas.length; i++) {
+          const numero = parseFloat(celulas[i].textContent);
+          const numeroFormatado = numero.toFixed(2).replace('.', ',');
+          // const numeroFormatado = numero.toFixed(2);
+          celulas[i].textContent = numeroFormatado;
+        }
+      </script>
   
 </body>
 </html>
